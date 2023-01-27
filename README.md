@@ -2,7 +2,7 @@
   
 # ETL Mini Project - Food Inspections
   
-This is a mini project done as a group and purposed to practice teamwork and collaborativeVio;a problem-solving. Timeframe was very limited and division of labor made it possible to accomplish the task.</div>
+This is a mini project done as a group and purposed to practice teamwork and collaborative problem-solving. Timeframe was very limited and division of labor made it possible to accomplish the task.</div>
 
 
 ## Contributors
@@ -23,7 +23,7 @@ Dataset #1 - Inspections of restaurants and food establishments in Chicago from 
   | Inspection Id | Int     | Unique Id per inspection 
   | DBA Name      | String  | Business Name            
   | AKA Name      | String  | Also Known As Name
-  | License #     | Integer | License number for Business
+  | License #     | Int | License number for Business
   | Facility Type | String  | Business Type
   | Risk          | String  | Risk# and Category
   | Address       | String  | Strett address
@@ -38,10 +38,6 @@ Dataset #1 - Inspections of restaurants and food establishments in Chicago from 
   | Longitude       | Float  | Longitude
   | Location        | String | Latitude and Longitude in dictionary format
   
- 
-## Data Limitations
-
-- The API call has a limitation of the number of records that can be extracted, therefore we only used this data as a way to illustrate for the purposes of this class how to combine two datasets together.
 
 ## Extract
 
@@ -49,18 +45,22 @@ Dataset #1 - Inspections of restaurants and food establishments in Chicago from 
 - The first data set contains food inspection instances from 1/1/2010-6/30/2018, and the second data set contains instances from 7/1/2018-Present.
 - Both sets have the same keys, and the reason a new set was created after 7/1/2018 was because the definitions of violations changed.
 - We extracted the first data set, Food Inspections- 1/1/2010-6/30/2018, as a CSV file. This source contained most of the data, with 173k food inspection instances.
-- The second data set, Food Inspections- 7/1/2018-Present was extracted as a JSON file using an API call. 
+- The second data set, Food Inspections- 7/1/2018-Present was extracted as a JSON file using an API call.
+- The url= (https://data.cityofchicago.org/resource/qizy-d2wf.json) we used for the API call. 
 - Using the data in the JSON file, we created a column heading list as well as an empty list to hold all data rows. Using a for loop we extracted our desired values and appended them to the list we created.
 - From here, we created a data frame using the extracted rows and column header list.
 
 ## Transform
 
+- Reviewing the food inspection data set, we chose "inspection_id" as the primary key due to the unique values across both data sets. 
 - Right away we dropped 3 columns, “Latitude”, “Longitude”, and “Location”. These keys did not contain relevant values to our desired data set as all 3 columns contained coordinates for their respected business.
 - We renamed all the remaining columns in our CSV file to lower case with under-scores in place of spaces. We did this to ensure proper loading into PostgreSQL. 
 - We loaded both datasets into pandas DataFrames and combined Dataframes into one single source.
-- We changed “inspection_id”, “license_id”, and “zip” from float to integer. We also changed “inspection_date” to datetime.
+- We changed “inspection_id”, “license_id”, and “zip” from float to integer. 
+- We also changed “inspection_date” to datetime. JSON and CSV had different formats for their dates, so we had to change the format to match. 
 - To clarify the “risk” column, we split the values in the column into 3 separate columns.
 - The first column contained just the string value “Risk”, which we deemed unnecessary and dropped the column. The second column contains the risk rank as an integer from 1-3, given in the original data set. The third column contains the level of risk from low-high, and we removed the parentheses enclosing the levels from the original column.
+- Some risk values were blank; for these we added a value of "0". 
 - We investigated the “results” column containing the outcome of each instance. Some rows were labeled “Out of Business”. We dropped these rows as they serve no relevance due to their forced closure. 
 - The original data set warns that there may have been duplicate values. To clean this, we found duplicate "inspection_id” values and dropped those.
 - For purposes of this project, we dropped the “violations” column as the values of this column were too large to fit the database. In a real-world situation, this column would be imperative for analysis.
@@ -69,6 +69,10 @@ Dataset #1 - Inspections of restaurants and food establishments in Chicago from 
 
 - We loaded our final data into a relational database for storage.
 - We created a connection to PostgreSQL and used this to create a sqlalchemy engine.
-- From here, we loaded out joined dataframe to dictionary in PostgreSQL.
-- We used sqlalchemy to create our final table schema and uploaded our dataframe into the database table.
+- From here, we loaded our dataframe to SQL by doing a bulk insert into a PostgreSQL database table.
+- We used SQL in PostgreSQL to create the table. 
 - Finally, we commited our changes and closed the session. 
+
+## API Call Limitations
+
+- The API call has a limitation of the number of records that can be extracted, therefore we only used this data as a way to illustrate for the purposes of this class how to combine two datasets together.
