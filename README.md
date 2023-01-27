@@ -25,8 +25,8 @@ Dataset #1 - Inspections of restaurants and food establishments in Chicago from 
   | AKA Name      | String  | Also Known As Name
   | License #     | Int | License number for Business
   | Facility Type | String  | Business Type
-  | Risk          | String  | Risk# and Category
-  | Address       | String  | Strett address
+  | Risk          | String  | Risk and Category
+  | Address       | String  | Street address
   | City          | String  | City
   | State         | String  | 2 alpha State
   | Zip           | Int     | 5 digit zip
@@ -55,7 +55,7 @@ Dataset #1 - Inspections of restaurants and food establishments in Chicago from 
 - Reviewing the food inspection data set, we chose "inspection_id" as the primary key due to the unique values across both data sets. 
 - Right away we dropped 3 columns, “Latitude”, “Longitude”, and “Location”. These keys did not contain relevant values to our desired data set as all 3 columns contained coordinates for their respected business.
 - We renamed all the remaining columns in our CSV file to lower case with under-scores in place of spaces. We did this to ensure proper loading into PostgreSQL. 
-- We loaded both datasets into pandas DataFrames and combined Dataframes into one single source.
+- We loaded both datasets into pandas DataFrames and combined DataFrames into one single source.
 - We changed “inspection_id”, “license_id”, and “zip” from float to integer. 
 - We also changed “inspection_date” to datetime. JSON and CSV had different formats for their dates, so we had to change the format to match. 
 - To clarify the “risk” column, we split the values in the column into 3 separate columns.
