@@ -38,6 +38,11 @@ Dataset #1 - Inspections of restaurants and food establishments in Chicago from 
   | Longitude       | Float  | Longitude
   | Location        | String | Latitude and Longitude in dictionary format
   
+ 
+## Data Limitations
+
+- The API call has a limitation of the number of records that can be extracted, therefore we only used this data as a way to illustrate for the purposes of this class how to combine two datasets together.
+
 ## Extract
 
 - We sourced our original data from the Chicago Data Portal. We extracted two different data sets containing food inspection instances in Chicago and surrounding areas. 
@@ -62,4 +67,8 @@ Dataset #1 - Inspections of restaurants and food establishments in Chicago from 
 
 ## Load
 
-
+- We loaded our final data into a relational database for storage.
+- We created a connection to PostgreSQL and used this to create a sqlalchemy engine.
+- From here, we loaded out joined dataframe to dictionary in PostgreSQL.
+- We used sqlalchemy to create our final table schema and uploaded our dataframe into the database table.
+- Finally, we commited our changes and closed the session. 
